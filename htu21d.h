@@ -43,8 +43,6 @@
 #define HTU21D_ERR_INVALID_STATE	0x06
 #define HTU21D_ERR_TIMEOUT	 		0x07
 
-// variables
-i2c_port_t _port;
 
 #ifdef __cplusplus
 extern "C" {

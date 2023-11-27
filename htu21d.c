@@ -11,6 +11,8 @@
 // Component header file
 #include "htu21d.h"
 
+static i2c_port_t _port = 0;
+
 /**
  * @brief Initializes the HTU21D temperature/humidity sensor and the I2C bus.
  *
