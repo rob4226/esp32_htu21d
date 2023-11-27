@@ -11,6 +11,21 @@
 // Component header file
 #include "htu21d.h"
 
+/**
+ * @brief Initializes the HTU21D temperature/humidity sensor and the I2C bus.
+ *
+ * I2C bus runs in master mode @ 100,000.
+ * @param port I2C port number to use, can be #I2C_NUM_0 ~ (#I2C_NUM_MAX - 1).
+ * @param sda_pin The GPIO pin number to use for the I2C sda (data) signal.
+ * @param scl_pin The GPIO pin number to use for the I2C scl (clock) signal.
+ * @param sda_internal_pullup Internal GPIO pull mode for I2C sda signal.
+ * @param scl_internal_pullup Internal GPIO pull mode for I2C scl signal.
+ * @return Returns #HTU21D_ERR_OK if I2C bus is initialized successfully and the
+ * HTU21D sensor is found. Returns #HTU21D_ERR_CONFIG if there is an error
+ * configuring the I2C bus. Returns #HTU21D_ERR_INSTALL if the I2C driver fails
+ * to install. Returns #HTU21D_ERR_NOTFOUND if the HTU21D sensor could not be
+ * found on the I2C bus.
+ */
 int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin,  gpio_pullup_t sda_internal_pullup,  gpio_pullup_t scl_internal_pullup) {
 	
 	esp_err_t ret;
@@ -42,6 +57,11 @@ int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin,  gpio_pullup_t sda_in
 	return HTU21D_ERR_OK;
 }
 
+/**
+ * @brief Read the temperature from the HTU21D sensor.
+ * @return Returns the temperature read from the HTU21D sensor in degrees
+ * Celsius.
+ */
 float ht21d_read_temperature() {
 
 	// get the raw value from the sensor
@@ -52,6 +72,11 @@ float ht21d_read_temperature() {
 	return (raw_temperature * 175.72 / 65536.0) - 46.85;
 }
 
+/**
+ * @brief Read the humidity from the HTU21D sensor.
+ * @return Returns the relative humidity percentage % read from the HTU21D
+ * sensor.
+ */
 float ht21d_read_humidity() {
 
 	// get the raw value from the sensor
