@@ -36,7 +36,7 @@ int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin,  gpio_pullup_t sda_in
 	i2c_master_start(cmd);
 	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true);
 	i2c_master_stop(cmd);
-	if(i2c_master_cmd_begin(port, cmd, 1000 / portTICK_RATE_MS) != ESP_OK)
+	if(i2c_master_cmd_begin(port, cmd, 1000 / portTICK_PERIOD_MS) != ESP_OK)
 		return HTU21D_ERR_NOTFOUND;
 	
 	return HTU21D_ERR_OK;
@@ -91,7 +91,7 @@ int htu21d_soft_reset() {
 	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true);
 	i2c_master_write_byte(cmd, SOFT_RESET, true);
 	i2c_master_stop(cmd);
-	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_RATE_MS);
+	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
 	i2c_cmd_link_delete(cmd);
 	
 	switch(ret) {
@@ -121,7 +121,7 @@ uint8_t ht21d_read_user_register() {
 	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true);
 	i2c_master_write_byte(cmd, READ_USER_REG, true);
 	i2c_master_stop(cmd);
-	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_RATE_MS);
+	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
 	i2c_cmd_link_delete(cmd);
 	if(ret != ESP_OK) return 0;
 	
@@ -132,7 +132,7 @@ uint8_t ht21d_read_user_register() {
 	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_READ, true);
 	i2c_master_read_byte(cmd, &reg_value, 0x01);
 	i2c_master_stop(cmd);
-	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_RATE_MS);
+	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
 	i2c_cmd_link_delete(cmd);
 	if(ret != ESP_OK) return 0;
 	
@@ -150,7 +150,7 @@ int ht21d_write_user_register(uint8_t value) {
 	i2c_master_write_byte(cmd, WRITE_USER_REG, true);
 	i2c_master_write_byte(cmd, value, true);
 	i2c_master_stop(cmd);
-	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_RATE_MS);
+	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
 	i2c_cmd_link_delete(cmd);
 	
 	switch(ret) {
@@ -180,12 +180,12 @@ uint16_t read_value(uint8_t command) {
 	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true);
 	i2c_master_write_byte(cmd, command, true);
 	i2c_master_stop(cmd);
-	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_RATE_MS);
+	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
 	i2c_cmd_link_delete(cmd);
 	if(ret != ESP_OK) return 0;
 	
 	// wait for the sensor (50ms)
-	vTaskDelay(50 / portTICK_RATE_MS);
+	vTaskDelay(50 / portTICK_PERIOD_MS);
 	
 	// receive the answer
 	uint8_t msb, lsb, crc;
@@ -196,7 +196,7 @@ uint16_t read_value(uint8_t command) {
 	i2c_master_read_byte(cmd, &lsb, 0x00);
 	i2c_master_read_byte(cmd, &crc, 0x01);
 	i2c_master_stop(cmd);
-	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_RATE_MS);
+	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
 	i2c_cmd_link_delete(cmd);
 	if(ret != ESP_OK) return 0;
 	
