@@ -17,7 +17,7 @@ int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin,  gpio_pullup_t sda_in
 	_port = port;
 	
 	// setup i2c controller
-	i2c_config_t conf;
+	i2c_config_t conf = {0};
 	conf.mode = I2C_MODE_MASTER;
 	conf.sda_io_num = sda_pin;
 	conf.scl_io_num = scl_pin;
