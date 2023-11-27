@@ -6,7 +6,7 @@
  *
  * Luca Dentella, www.lucadentella.it
  */
-
+#pragma once
  
  // Error library
 #include "esp_err.h"
@@ -46,6 +46,10 @@
 // variables
 i2c_port_t _port;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // functions
 int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin, gpio_pullup_t sda_internal_pullup, gpio_pullup_t scl_internal_pullup);
 float ht21d_read_temperature();
@@ -60,5 +64,8 @@ int ht21d_write_user_register(uint8_t value);
 uint16_t read_value(uint8_t command);
 bool is_crc_valid(uint16_t value, uint8_t crc);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif  // __ESP_HTU21D_H__
