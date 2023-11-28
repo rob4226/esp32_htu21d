@@ -56,3 +56,4 @@ sdkconfig.old
 build
 managed_components
 .vscode
+dependencies.lock
