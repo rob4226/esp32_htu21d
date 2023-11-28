@@ -257,3 +257,11 @@ bool is_crc_valid(uint16_t value, uint8_t crc) {
 	return (row == 0);
 }
 
+/**
+ * @brief Converts Celsius to Fahrenheit.
+ * @param celsius_degrees The temperature in degrees Celsius.
+ * @return Returns a `float` in degrees Fahrenheit.
+ */
+float celsius_to_fahrenheit(float celsius_degrees) {
+    return (celsius_degrees * 9.0F / 5.0F) + 32.0F;
+}

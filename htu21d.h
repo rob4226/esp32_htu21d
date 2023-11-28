@@ -62,6 +62,9 @@ int ht21d_write_user_register(uint8_t value);
 uint16_t read_value(uint8_t command);
 bool is_crc_valid(uint16_t value, uint8_t crc);
 
+// Extra functions:
+float celsius_to_fahrenheit(float celsius_degrees);
+
 #ifdef __cplusplus
 }
 #endif
