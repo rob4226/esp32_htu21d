@@ -16,6 +16,8 @@ static const char* TAG = "htu21d_driver";
 
 static i2c_port_t _port = 0; /**< The I2C port that the HTU21D sensor is connected to. */
 
+#define HTU21_TEMPERATURE_COEFFICIENT   (-0.15F)   /**< Used in equation to convert Measured Relative Humidity to Temperature Compensated Relative Humidity. */
+
 /**
  * @brief Initializes the HTU21D temperature/humidity sensor and the I2C bus.
  *
@@ -92,7 +94,29 @@ float ht21d_read_temperature() {
 }
 
 /**
- * @brief Read the humidity from the HTU21D sensor.
+ * @brief Read the relative humidity from the HTU21D sensor.
+ *
+ * Relative Humidity is the ratio of the actual water vapor pressure in the air
+ * to the saturation water vapor pressure in the air at a specific temperature,
+ * expressed as a percentage.
+ *
+ * In other words, relative humidity represents the amount of water vapor
+ * present in the air as a percentage of the total amount of water vapor the air
+ * can hold relative to temperature.
+ *
+ * For example, if the relative humidity is at 20% at the ambient air
+ * temperature of 25°C, then the air currently holds 20% of the maximum amount
+ * of water vapor it can hold at 25°C.
+ *
+ * If the ambient temperature increases, the air can hold more water vapor, and
+ * the relative humidity will decrease since the air can hold more water vapor.
+ *
+ * ### Temperature Compensated Relative Humidity
+ *
+ * For greater accuracy, you can run the result of this function, and the
+ * current temperature, through the #htu21_compute_compensated_humidity
+ * function, which will compensate for the effect that temperature has on
+ * humidity.
  * @return Returns the relative humidity percentage % read from the HTU21D
  * sensor. Returns `-999` if it fails to read the humidity from the sensor.
  */
@@ -319,4 +343,22 @@ bool is_crc_valid(uint16_t value, uint8_t crc) {
  */
 float celsius_to_fahrenheit(float celsius_degrees) {
     return (celsius_degrees * 9.0F / 5.0F) + 32.0F;
+}
+
+/**
+ * @brief Computes the temperature compensated humidity.
+ *
+ * For temperatures other than 25°C, this function, which applies a temperature
+ * coefficient compensation equation, can be used and will guarantee Relative
+ * Humidity accuracy within ±2%, from 0°C to 80°C.
+ *
+ * @param[in] temperature Actual temperature measured (degC).
+ * @param[in] relative_humidity Actual relative humidity measured (%RH).
+ *
+ * @return Returns the temperature compensated humidity (%RH).
+ */
+float htu21_compute_compensated_humidity(float temperature,
+                                         float relative_humidity) {
+  return (relative_humidity +
+          (25.0F - temperature) * HTU21_TEMPERATURE_COEFFICIENT);
 }

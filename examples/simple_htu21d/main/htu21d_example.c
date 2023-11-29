@@ -27,8 +27,11 @@ void app_main(void) {
     float temp = ht21d_read_temperature();
     float humidity = ht21d_read_humidity();
 
-    ESP_LOGI(TAG, "Temperature: %.02f°C / %.02f°F  Humidity: %.02f%%", temp,
-             celsius_to_fahrenheit(temp), humidity);
+    ESP_LOGI(TAG,
+             "Temperature: %.02f°C / %.02f°F "
+             "Humidity: %.02f%% / Temperature Compensated Humidity: %.02f%%",
+             temp, celsius_to_fahrenheit(temp),
+             humidity, htu21_compute_compensated_humidity(temp, humidity));
 
     vTaskDelay(pdMS_TO_TICKS(2000));
   }

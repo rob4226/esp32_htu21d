@@ -64,6 +64,7 @@ bool is_crc_valid(uint16_t value, uint8_t crc);
 
 // Extra functions:
 float celsius_to_fahrenheit(float celsius_degrees);
+float htu21_compute_compensated_humidity(float temperature, float relative_humidity);
 
 #ifdef __cplusplus
 }
