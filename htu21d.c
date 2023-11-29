@@ -7,11 +7,14 @@
  * Luca Dentella, www.lucadentella.it
  */
  
- 
+#include "esp_log.h"
+
 // Component header file
 #include "htu21d.h"
 
-static i2c_port_t _port = 0;
+static const char* TAG = "htu21d_driver";
+
+static i2c_port_t _port = 0; /**< The I2C port that the HTU21D sensor is connected to. */
 
 /**
  * @brief Initializes the HTU21D temperature/humidity sensor and the I2C bus.
@@ -42,19 +45,33 @@ int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin,  gpio_pullup_t sda_in
 	conf.scl_pullup_en = scl_internal_pullup;
 	conf.master.clk_speed = 100000;
 	ret = i2c_param_config(port, &conf);
-	if(ret != ESP_OK) return HTU21D_ERR_CONFIG;
+	if(ret != ESP_OK) {
+		ESP_LOGE(TAG, "Failed to configure I2C (port %d, sda_pin %d, scl_pin %d): %s", port, sda_pin, scl_pin, esp_err_to_name(ret));
+		return HTU21D_ERR_CONFIG;
+	}
 	
 	// install the driver
 	ret = i2c_driver_install(port, I2C_MODE_MASTER, 0, 0, 0);
-	if(ret != ESP_OK) return HTU21D_ERR_INSTALL;
+	if(ret != ESP_OK) {
+		ESP_LOGE(TAG, "Failed to install I2C driver: %s", esp_err_to_name(ret));
+		return HTU21D_ERR_INSTALL;
+	}
 	
 	// verify if a sensor is present
 	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true);
-	i2c_master_stop(cmd);
-	if(i2c_master_cmd_begin(port, cmd, 1000 / portTICK_PERIOD_MS) != ESP_OK)
+	if (cmd == NULL) {
+		ESP_LOGE(TAG, "Not enough dynamic memory");
+		return HTU21D_ERR_FAIL;
+	}
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_start(cmd));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_write_byte(
+		cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_stop(cmd));
+	ret = i2c_master_cmd_begin(port, cmd, 1000 / portTICK_PERIOD_MS);
+	if(ret != ESP_OK) {
+		ESP_LOGE(TAG, "HTU21D sensor not found on bus: %s", esp_err_to_name(ret));
 		return HTU21D_ERR_NOTFOUND;
+	}
 	
 	return HTU21D_ERR_OK;
 }
@@ -62,7 +79,7 @@ int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin,  gpio_pullup_t sda_in
 /**
  * @brief Read the temperature from the HTU21D sensor.
  * @return Returns the temperature read from the HTU21D sensor in degrees
- * Celsius.
+ * Celsius. Returns `-999` if it fails to read the temperature from the sensor.
  */
 float ht21d_read_temperature() {
 
@@ -77,7 +94,7 @@ float ht21d_read_temperature() {
 /**
  * @brief Read the humidity from the HTU21D sensor.
  * @return Returns the relative humidity percentage % read from the HTU21D
- * sensor.
+ * sensor. Returns `-999` if it fails to read the humidity from the sensor.
  */
 float ht21d_read_humidity() {
 
@@ -114,11 +131,17 @@ int htu21d_soft_reset() {
 
 	// send the command
 	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true);
-	i2c_master_write_byte(cmd, SOFT_RESET, true);
-	i2c_master_stop(cmd);
+	if (cmd == NULL) {
+		ESP_LOGE(TAG, "Not enough dynamic memory");
+		return HTU21D_ERR_FAIL;
+	}
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_start(cmd));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_write_byte(
+		cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_write_byte(cmd, SOFT_RESET, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_stop(cmd));
 	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
+	ESP_ERROR_CHECK_WITHOUT_ABORT(ret);
 	i2c_cmd_link_delete(cmd);
 	
 	switch(ret) {
@@ -144,22 +167,34 @@ uint8_t ht21d_read_user_register() {
 	
 	// send the command
 	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true);
-	i2c_master_write_byte(cmd, READ_USER_REG, true);
-	i2c_master_stop(cmd);
+	if (cmd == NULL) {
+		ESP_LOGE(TAG, "Not enough dynamic memory");
+		return 0;
+	}
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_start(cmd));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_write_byte(
+		cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_write_byte(cmd, READ_USER_REG, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_stop(cmd));
 	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
+	ESP_ERROR_CHECK_WITHOUT_ABORT(ret);
 	i2c_cmd_link_delete(cmd);
 	if(ret != ESP_OK) return 0;
 	
 	// receive the answer
 	uint8_t reg_value;
 	cmd = i2c_cmd_link_create();
-	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_READ, true);
-	i2c_master_read_byte(cmd, &reg_value, 0x01);
-	i2c_master_stop(cmd);
+	if (cmd == NULL) {
+		ESP_LOGE(TAG, "Not enough dynamic memory");
+		return 0;
+	}
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_start(cmd));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_write_byte(
+		cmd, (HTU21D_ADDR << 1) | I2C_MASTER_READ, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_read_byte(cmd, &reg_value, 0x01));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_stop(cmd));
 	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
+	ESP_ERROR_CHECK_WITHOUT_ABORT(ret);
 	i2c_cmd_link_delete(cmd);
 	if(ret != ESP_OK) return 0;
 	
@@ -172,12 +207,18 @@ int ht21d_write_user_register(uint8_t value) {
 	
 	// send the command
 	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true);
-	i2c_master_write_byte(cmd, WRITE_USER_REG, true);
-	i2c_master_write_byte(cmd, value, true);
-	i2c_master_stop(cmd);
+	if (cmd == NULL) {
+		ESP_LOGE(TAG, "Not enough dynamic memory");
+		return HTU21D_ERR_FAIL;
+	}
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_start(cmd));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(
+		i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_write_byte(cmd, WRITE_USER_REG, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_write_byte(cmd, value, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_stop(cmd));
 	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
+	ESP_ERROR_CHECK_WITHOUT_ABORT(ret);
 	i2c_cmd_link_delete(cmd);
 	
 	switch(ret) {
@@ -203,11 +244,17 @@ uint16_t read_value(uint8_t command) {
 	
 	// send the command
 	i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true);
-	i2c_master_write_byte(cmd, command, true);
-	i2c_master_stop(cmd);
+	if (cmd == NULL) {
+		ESP_LOGE(TAG, "Not enough dynamic memory");
+		return 0;
+	}
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_start(cmd));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(
+		i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_WRITE, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_write_byte(cmd, command, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_stop(cmd));
 	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
+	ESP_ERROR_CHECK_WITHOUT_ABORT(ret);
 	i2c_cmd_link_delete(cmd);
 	if(ret != ESP_OK) return 0;
 	
@@ -217,18 +264,26 @@ uint16_t read_value(uint8_t command) {
 	// receive the answer
 	uint8_t msb, lsb, crc;
 	cmd = i2c_cmd_link_create();
-	i2c_master_start(cmd);
-	i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_READ, true);
-	i2c_master_read_byte(cmd, &msb, 0x00);
-	i2c_master_read_byte(cmd, &lsb, 0x00);
-	i2c_master_read_byte(cmd, &crc, 0x01);
-	i2c_master_stop(cmd);
+	if (cmd == NULL) {
+		ESP_LOGE(TAG, "Not enough dynamic memory");
+		return 0;
+	}
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_start(cmd));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(
+		i2c_master_write_byte(cmd, (HTU21D_ADDR << 1) | I2C_MASTER_READ, true));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_read_byte(cmd, &msb, 0x00));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_read_byte(cmd, &lsb, 0x00));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_read_byte(cmd, &crc, 0x01));
+	ESP_ERROR_CHECK_WITHOUT_ABORT(i2c_master_stop(cmd));
 	ret = i2c_master_cmd_begin(_port, cmd, 1000 / portTICK_PERIOD_MS);
+	ESP_ERROR_CHECK_WITHOUT_ABORT(ret);
 	i2c_cmd_link_delete(cmd);
 	if(ret != ESP_OK) return 0;
 	
 	uint16_t raw_value = ((uint16_t) msb << 8) | (uint16_t) lsb;
-	if(!is_crc_valid(raw_value, crc)) printf("CRC invalid\r\n");
+	if(!is_crc_valid(raw_value, crc)) {
+		ESP_LOGE(TAG, "CRC is invalid.");
+	}
 	return raw_value & 0xFFFC;
 }
 
