@@ -24,8 +24,8 @@ void app_main(void) {
            "The I2C bus was setup successfully and the HTU21D sensor found!");
 
   while (1) {
-    float temp = ht21d_read_temperature();
-    float humidity = ht21d_read_humidity();
+    float temp = htu21d_read_temperature();
+    float humidity = htu21d_read_humidity();
 
     ESP_LOGI(TAG,
              "Temperature: %.02f°C / %.02f°F "

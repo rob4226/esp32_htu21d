@@ -50,15 +50,15 @@ extern "C" {
 
 // functions
 int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin, gpio_pullup_t sda_internal_pullup, gpio_pullup_t scl_internal_pullup);
-float ht21d_read_temperature();
-float ht21d_read_humidity();
-uint8_t ht21d_get_resolution();
-int ht21d_set_resolution(uint8_t resolution);
+float htu21d_read_temperature();
+float htu21d_read_humidity();
+uint8_t htu21d_get_resolution();
+int htu21d_set_resolution(uint8_t resolution);
 int htu21d_soft_reset();
 
 // helper functions
-uint8_t ht21d_read_user_register();
-int ht21d_write_user_register(uint8_t value);
+uint8_t htu21d_read_user_register();
+int htu21d_write_user_register(uint8_t value);
 uint16_t read_value(uint8_t command);
 bool is_crc_valid(uint16_t value, uint8_t crc);
 

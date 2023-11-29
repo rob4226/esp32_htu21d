@@ -83,7 +83,7 @@ int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin,  gpio_pullup_t sda_in
  * @return Returns the temperature read from the HTU21D sensor in degrees
  * Celsius. Returns `-999` if it fails to read the temperature from the sensor.
  */
-float ht21d_read_temperature() {
+float htu21d_read_temperature() {
 
 	// get the raw value from the sensor
 	uint16_t raw_temperature = read_value(TRIGGER_TEMP_MEASURE_NOHOLD);
@@ -120,7 +120,7 @@ float ht21d_read_temperature() {
  * @return Returns the relative humidity percentage % read from the HTU21D
  * sensor. Returns `-999` if it fails to read the humidity from the sensor.
  */
-float ht21d_read_humidity() {
+float htu21d_read_humidity() {
 
 	// get the raw value from the sensor
 	uint16_t raw_humidity = read_value(TRIGGER_HUMD_MEASURE_NOHOLD);
@@ -130,23 +130,23 @@ float ht21d_read_humidity() {
 	return (raw_humidity * 125.0 / 65536.0) - 6.0;
 }
 
-uint8_t ht21d_get_resolution() {
+uint8_t htu21d_get_resolution() {
 
-	uint8_t reg_value = ht21d_read_user_register();
+	uint8_t reg_value = htu21d_read_user_register();
 	return reg_value & 0b10000001;
 }
 
-int ht21d_set_resolution(uint8_t resolution) {
+int htu21d_set_resolution(uint8_t resolution) {
 	
 	// get the actual resolution
-	uint8_t reg_value = ht21d_read_user_register();
+	uint8_t reg_value = htu21d_read_user_register();
 	reg_value &= 0b10000001;
 	
 	// update the register value with the new resolution
 	resolution &= 0b10000001;
 	reg_value |= resolution;
 	
-	return ht21d_write_user_register(reg_value);
+	return htu21d_write_user_register(reg_value);
 }
 
 int htu21d_soft_reset() {
@@ -185,7 +185,7 @@ int htu21d_soft_reset() {
 	return HTU21D_ERR_OK;
 }
 
-uint8_t ht21d_read_user_register() {
+uint8_t htu21d_read_user_register() {
 	
 	esp_err_t ret;
 	
@@ -225,7 +225,7 @@ uint8_t ht21d_read_user_register() {
 	return reg_value;
 }
 
-int ht21d_write_user_register(uint8_t value) {
+int htu21d_write_user_register(uint8_t value) {
 	
 	esp_err_t ret;
 	

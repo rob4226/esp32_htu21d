@@ -32,8 +32,8 @@ ESP_ERROR_CHECK(
     htu21d_init(I2C_NUM_0, I2C_SDA_PIN, I2C_SCL_PIN, GPIO_PULLUP_ENABLE, GPIO_PULLUP_ENABLE));
 
 while (1) {
-  float temp = ht21d_read_temperature();
-  float humidity = ht21d_read_humidity();
+  float temp = htu21d_read_temperature();
+  float humidity = htu21d_read_humidity();
 
   printf("Temperature: %.02f°C  Humidity: %.02f%%\n", temp, humidity);
 
@@ -41,4 +41,4 @@ while (1) {
 }
 ```
 
-Also, see the example project in the [example](./example) directory of this repo.
+Also, see the example projects in the [examples](./examples) directory of this repo.
