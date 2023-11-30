@@ -1,22 +1,27 @@
-/*
- * HTU21D Component
+/**
+ * @file htu21d.c
+ * @brief HTU21D Sensor ESP-IDF Component source code file.
  *
- * esp-idf component to interface with HTU21D humidity and temperature sensor
- * by TE Connectivity (http://www.te.com/usa-en/product-CAT-HSC0004.html)
+ * ESP-IDF component to interface with the HTU21D humidity and temperature sensor
+ * by TE Connectivity (http://www.te.com/usa-en/product-CAT-HSC0004.html).
  *
- * Luca Dentella, www.lucadentella.it
+ * @author Luca Dentella, www.lucadentella.it
+ * @author rob4226 <rob4226@yahoo.com>
+ * @date 10.8.2017, 11.29.2023
  */
- 
-#include "esp_log.h"
 
-// Component header file
+#include <math.h>
+#include "esp_log.h"
 #include "htu21d.h"
+
+#define HTU21_TEMPERATURE_COEFFICIENT   (-0.15F)   /**< Used in equation to convert Measured Relative Humidity to Temperature Compensated Relative Humidity. */
+#define HTU21_CONSTANT_A				(8.1332F)  /**< Constant `A` used in Partial Pressure from Ambient Temperature formula. */
+#define HTU21_CONSTANT_B				(1762.39F) /**< Constant `B` used in Partial Pressure from Ambient Temperature formula. */
+#define HTU21_CONSTANT_C				(235.66F)  /**< Constant `C` used in Partial Pressure from Ambient Temperature formula. */
 
 static const char* TAG = "htu21d_driver";
 
 static i2c_port_t _port = 0; /**< The I2C port that the HTU21D sensor is connected to. */
-
-#define HTU21_TEMPERATURE_COEFFICIENT   (-0.15F)   /**< Used in equation to convert Measured Relative Humidity to Temperature Compensated Relative Humidity. */
 
 /**
  * @brief Initializes the HTU21D temperature/humidity sensor and the I2C bus.
@@ -128,6 +133,47 @@ float htu21d_read_humidity() {
 	
 	// return the real value, formula in datasheet
 	return (raw_humidity * 125.0 / 65536.0) - 6.0;
+}
+
+/**
+ * @brief Calculates the Partial Pressure at ambient temperature, by using the
+ * ambient temperature read from the HTU21D sensor.
+ *
+ * This function is really only used to calculate the dew point.
+ * @param[in] temperature Actual ambient temperature measured from sensor (degC).
+ * @return Returns the current Partial Pressure in mmHg at ambient temperature.
+ */
+float htu21d_compute_partial_pressure(float temperature) {
+	return pow(10, HTU21_CONSTANT_A - HTU21_CONSTANT_B / (temperature + HTU21_CONSTANT_C));
+}
+
+/**
+ * @brief Calculates the Dew Point.
+ *
+ * The dew point is the temperature at which the water vapor in the air becomes
+ * saturated and condensation begins.
+ *
+ * The dew point is associated with relative humidity. A high relative humidity
+ * indicates that the dew point is closer to the current air temperature.
+ * Relative humidity of 100% indicates that the dew point is equal to the
+ * current temperature (and the air is maximally saturated with water so it
+ * cannot hold any more water). When the dew point stays constant and ambient
+ * temperature increases, relative humidity decreases.
+ *
+ * Dew point temperature of the air is calculated using Ambient Relative
+ * Humidity and Temperature measurements from HTU21D sensor.
+ * @param[in] temperature Actual ambient temperature (degC) measured from
+ * sensor.
+ * @param[in] relative_humidity Actual relative humidity (%RH) measured from
+ * sensor.
+ * @return Returns the calculated Dew Point in °C. 
+ */
+float htu21d_compute_dew_point(float temperature, float relative_humidity) {
+  float partial_pressure = htu21d_compute_partial_pressure(temperature);
+
+  return - HTU21_CONSTANT_B /
+           (log10(relative_humidity * partial_pressure / 100.0F) - HTU21_CONSTANT_A)
+		   - HTU21_CONSTANT_C;
 }
 
 uint8_t htu21d_get_resolution() {

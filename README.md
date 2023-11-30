@@ -42,3 +42,28 @@ while (1) {
 ```
 
 Also, see the example projects in the [examples](./examples) directory of this repo.
+
+## HTU21D Sensor
+
+The HTU21D sensor is a self-contained humidity and temperature sensor that is
+fully calibrated during manufacturing. The sensor can operate from 1.5V to 3.6V,
+has selectable resolution, low battery detection, and checksum capability. The
+HTU21D has a low current stand-by mode for power-sensitive applications.
+
+This sensor is able to measure the ambient temperature and relative humidity.
+
+The HTU21D sensor requires a voltage supply between 1.5V and 3.6V.
+
+### Measurement Resolutions
+
+The default resolution is set to 12-bit relative humidity and 14-bit temperature
+readings.
+
+The following combinations of measurement resolutions can be selected:
+
+| Bit 7 | Bit 0 | RH      | Temp    |
+|-------|-------|---------|---------|
+| 0     | 0     | 12 bits | 14 bits |
+| 0     | 1     | 8 bits  | 12 bits |
+| 1     | 0     | 10 bits | 13 bits |
+| 1     | 1     | 11 bits | 11 bits |

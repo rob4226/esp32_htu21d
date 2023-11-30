@@ -1,0 +1,6 @@
+## IDF Component Manager Manifest File
+dependencies:
+  # Define local dependency with relative path
+  esp32_htu21d:
+    version: "^1.0"
+    override_path: "../../../"

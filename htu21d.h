@@ -1,28 +1,25 @@
-/*
- * HTU21D Component
+/**
+ * @file htu21d.h
+ * @brief HTU21D Sensor ESP-IDF Component header file.
  *
  * esp-idf component to interface with HTU21D humidity and temperature sensor
  * by TE Connectivity (http://www.te.com/usa-en/product-CAT-HSC0004.html)
  *
- * Luca Dentella, www.lucadentella.it
+ * @author Dentella, www.lucadentella.it
+ * @author rob4226 <rob4226@yahoo.com>
+ * @date 10.8.2017, 11.29.2023
  */
+
 #pragma once
- 
- // Error library
-#include "esp_err.h"
- 
-// I2C driver
-#include "driver/i2c.h"
 
-// FreeRTOS (for delay)
-#include "freertos/task.h"
-
- 
 #ifndef __ESP_HTU21D_H__
 #define __ESP_HTU21D_H__
+ 
+#include "esp_err.h"
+#include "driver/i2c.h"
+#include "freertos/task.h"
 
-// sensor address
-#define HTU21D_ADDR		0x40
+#define HTU21D_ADDR		0x40 /**< I2C address of the HTU21D sensor. */
 
 // HTU21D commands
 #define TRIGGER_TEMP_MEASURE_HOLD  		0xE3
@@ -65,6 +62,8 @@ bool is_crc_valid(uint16_t value, uint8_t crc);
 // Extra functions:
 float celsius_to_fahrenheit(float celsius_degrees);
 float htu21_compute_compensated_humidity(float temperature, float relative_humidity);
+float htu21d_compute_partial_pressure(float temperature);
+float htu21d_compute_dew_point(float temperature, float relative_humidity);
 
 #ifdef __cplusplus
 }

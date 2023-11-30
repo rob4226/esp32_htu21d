@@ -1,17 +1,16 @@
 /**
  * @file htu21_example.c
- * @author Rob4226 (Rob4226@yahoo.com)
  * @brief Example of using this HTU21D sensor ESP-IDF component.
+ * @author Rob4226 <Rob4226@yahoo.com>
  * @version 0.1
  * @date 11.27.2023 3:57PM
  * @copyright MIT License 2023
  */
 
-#include <esp_err.h>
-#include <esp_log.h>
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
-
+#include "esp_err.h"
+#include "esp_log.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "htu21d.h"
 
 static const char *TAG = "EXAMPLE";
@@ -27,11 +26,8 @@ void app_main(void) {
     float temp = htu21d_read_temperature();
     float humidity = htu21d_read_humidity();
 
-    ESP_LOGI(TAG,
-             "Temperature: %.02f°C / %.02f°F "
-             "Humidity: %.02f%% / Temperature Compensated Humidity: %.02f%%",
-             temp, celsius_to_fahrenheit(temp),
-             humidity, htu21_compute_compensated_humidity(temp, humidity));
+    ESP_LOGI(TAG, "Temperature: %.02f°C / %.02f°F  Humidity: %.02f%%", temp,
+             celsius_to_fahrenheit(temp), humidity);
 
     vTaskDelay(pdMS_TO_TICKS(2000));
   }
