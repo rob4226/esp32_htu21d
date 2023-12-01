@@ -1,0 +1,60 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+# After cloning repo run:
+# pre-commit install -t pre-commit -t commit-msg
+
+# To manually run it on all files:
+# pre-commit run --all-files
+
+# To auto-update pre-commit config to the latest repos' versions run:
+# pre-commit autoupdate
+
+# Top level exclude excludes from all hooks:
+# Using multiple line regex for easily listing multiple excludes:
+# https://pre-commit.com/#regular-expressions
+exclude: |
+  (?x)^(
+    build/.*|
+    docs/.*|
+    managed_components/.*|
+    \.vscode/.*|
+    report.txt
+  )$
+
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+    -   id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-json
+        exclude: ^.build/
+    -   id: check-added-large-files
+    -   id: check-merge-conflict
+    -   id: check-case-conflict
+    -   id: check-merge-conflict
+    -   id: mixed-line-ending
+        args: [--fix=no]  # auto,crlf,lf,no
+-   repo: https://github.com/jorisroovers/gitlint
+    rev:  v0.19.1
+    hooks:
+    -   id: gitlint
+        # Use these args or a .gitlint config file but the below works fine!
+        # B6 is requiring a body msg. B5 is min body msg length of 20 if you do have a msg.
+        args: [--contrib=CT1, '--ignore=B6,B5', --msg-filename]
+  # Per Espressif style guide:
+  # ESP-IDF uses Astyle to format source code. The configuration is stored in
+  # $IDF_PATH/tools/ci/astyle-rules.yml file.
+  # https://docs.espressif.com/projects/esp-idf/en/latest/esp32/contribute/style-guide.html#formatting-your-code
+  # https://docs.espressif.com/projects/esp-idf/en/latest/esp32/contribute/install-pre-commit-hook.html
+  # https://github.com/espressif/astyle_py
+  # https://astyle.sourceforge.net
+  # Copied some of astyle-rules.yml from esp-idf repo: https://github.com/espressif/esp-idf/blob/master/tools/ci/astyle-rules.yml
+-   repo: https://github.com/espressif/astyle_py.git
+    rev: v1.0.5
+    hooks:
+      - id: astyle_py
+        args: ['--astyle-version=3.4.7', '--rules=astyle-rules.yml']

@@ -14,32 +14,31 @@
 
 #ifndef __ESP_HTU21D_H__
 #define __ESP_HTU21D_H__
- 
+
 #include "esp_err.h"
 #include "driver/i2c.h"
 #include "freertos/task.h"
 
-#define HTU21D_ADDR		0x40 /**< I2C address of the HTU21D sensor. */
+#define HTU21D_ADDR     0x40 /**< I2C address of the HTU21D sensor. */
 
 // HTU21D commands
-#define TRIGGER_TEMP_MEASURE_HOLD  		0xE3
-#define TRIGGER_HUMD_MEASURE_HOLD  		0xE5
-#define TRIGGER_TEMP_MEASURE_NOHOLD  	0xF3
-#define TRIGGER_HUMD_MEASURE_NOHOLD  	0xF5
-#define WRITE_USER_REG  				0xE6
-#define READ_USER_REG  					0xE7
-#define SOFT_RESET  					0xFE
+#define TRIGGER_TEMP_MEASURE_HOLD       0xE3
+#define TRIGGER_HUMD_MEASURE_HOLD       0xE5
+#define TRIGGER_TEMP_MEASURE_NOHOLD     0xF3
+#define TRIGGER_HUMD_MEASURE_NOHOLD     0xF5
+#define WRITE_USER_REG                  0xE6
+#define READ_USER_REG                   0xE7
+#define SOFT_RESET                      0xFE
 
 // return values
-#define HTU21D_ERR_OK				0x00
-#define HTU21D_ERR_CONFIG			0x01
-#define HTU21D_ERR_INSTALL			0x02
-#define HTU21D_ERR_NOTFOUND			0x03
-#define HTU21D_ERR_INVALID_ARG		0x04
-#define HTU21D_ERR_FAIL		 		0x05
-#define HTU21D_ERR_INVALID_STATE	0x06
-#define HTU21D_ERR_TIMEOUT	 		0x07
-
+#define HTU21D_ERR_OK               0x00
+#define HTU21D_ERR_CONFIG           0x01
+#define HTU21D_ERR_INSTALL          0x02
+#define HTU21D_ERR_NOTFOUND         0x03
+#define HTU21D_ERR_INVALID_ARG      0x04
+#define HTU21D_ERR_FAIL             0x05
+#define HTU21D_ERR_INVALID_STATE    0x06
+#define HTU21D_ERR_TIMEOUT          0x07
 
 #ifdef __cplusplus
 extern "C" {

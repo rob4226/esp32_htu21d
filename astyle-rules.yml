@@ -1,0 +1,5 @@
+# 12.1.2023 1:09AM Copied some of this from the esp-idf repo:
+# https://github.com/espressif/esp-idf/blob/master/tools/ci/astyle-rules.yml
+DEFAULT:
+  # These formatting options will be used by default.
+  options: "--style=otbs --attach-namespaces --attach-classes --indent=spaces=4 --convert-tabs --align-reference=name --keep-one-line-statements --pad-header --pad-oper --unpad-paren --max-continuation-indent=120"

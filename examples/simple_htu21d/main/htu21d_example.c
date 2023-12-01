@@ -15,20 +15,21 @@
 
 static const char *TAG = "EXAMPLE";
 
-void app_main(void) {
-  ESP_ERROR_CHECK(
-      htu21d_init(I2C_NUM_0, 1, 2, GPIO_PULLUP_ENABLE, GPIO_PULLUP_ENABLE));
+void app_main(void)
+{
+    ESP_ERROR_CHECK(
+        htu21d_init(I2C_NUM_0, 1, 2, GPIO_PULLUP_ENABLE, GPIO_PULLUP_ENABLE));
 
-  ESP_LOGI(TAG,
-           "The I2C bus was setup successfully and the HTU21D sensor found!");
+    ESP_LOGI(TAG,
+             "The I2C bus was setup successfully and the HTU21D sensor found!");
 
-  while (1) {
-    float temp = htu21d_read_temperature();
-    float humidity = htu21d_read_humidity();
+    while (1) {
+        float temp = htu21d_read_temperature();
+        float humidity = htu21d_read_humidity();
 
-    ESP_LOGI(TAG, "Temperature: %.02f°C / %.02f°F  Humidity: %.02f%%", temp,
-             celsius_to_fahrenheit(temp), humidity);
+        ESP_LOGI(TAG, "Temperature: %.02f°C / %.02f°F  Humidity: %.02f%%", temp,
+                 celsius_to_fahrenheit(temp), humidity);
 
-    vTaskDelay(pdMS_TO_TICKS(2000));
-  }
+        vTaskDelay(pdMS_TO_TICKS(2000));
+    }
 }

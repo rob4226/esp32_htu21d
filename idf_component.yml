@@ -8,7 +8,7 @@ documentation: https://github.com/rob4226/esp32_htu21d/blob/main/README.md
 issues: https://github.com/rob4226/esp32_htu21d/issues
 discussion: https://github.com/rob4226/esp32_htu21d/discussions
 tags:
-  - htu21d 
+  - htu21d
   - temperature
   - humidity
   - i2c

@@ -67,3 +67,15 @@ The following combinations of measurement resolutions can be selected:
 | 0     | 1     | 8 bits  | 12 bits |
 | 1     | 0     | 10 bits | 13 bits |
 | 1     | 1     | 11 bits | 11 bits |
+
+## Development/Contributing
+
+If you don't have the Python `pre-commit` package installed you can install it
+with `pip install pre-commit`.
+
+```shell
+git clone https://github.com/rob4226/esp32_htu21d.git
+# Setup hooks in newly cloned repo's .git folder for stuff like formatting code
+# on commit, and checking for valid commit message format:
+pre-commit install -t pre-commit -t commit-msg
+```
