@@ -18,6 +18,7 @@
 #define HTU21_CONSTANT_A                (8.1332F)  /**< Constant `A` used in Partial Pressure from Ambient Temperature formula. */
 #define HTU21_CONSTANT_B                (1762.39F) /**< Constant `B` used in Partial Pressure from Ambient Temperature formula. */
 #define HTU21_CONSTANT_C                (235.66F)  /**< Constant `C` used in Partial Pressure from Ambient Temperature formula. */
+#define HTU21_RESET_TIME                (15)       /**< It takes the HTU21D 15ms or less for a soft reset. */
 
 static const char* TAG = "htu21d_driver";
 
@@ -36,7 +37,8 @@ static i2c_port_t _port = 0; /**< The I2C port that the HTU21D sensor is connect
  * HTU21D sensor is found. Returns #HTU21D_ERR_CONFIG if there is an error
  * configuring the I2C bus. Returns #HTU21D_ERR_INSTALL if the I2C driver fails
  * to install. Returns #HTU21D_ERR_NOTFOUND if the HTU21D sensor could not be
- * found on the I2C bus.
+ * found on the I2C bus. Also, a soft reset command is sent, so any error that
+ * #htu21d_soft_reset returns is also possible.
  */
 int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin,  gpio_pullup_t sda_internal_pullup,  gpio_pullup_t scl_internal_pullup)
 {
@@ -78,6 +80,14 @@ int htu21d_init(i2c_port_t port, int sda_pin, int scl_pin,  gpio_pullup_t sda_in
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "HTU21D sensor not found on bus: %s", esp_err_to_name(ret));
         return HTU21D_ERR_NOTFOUND;
+    }
+    ESP_LOGI(TAG, "HTU21D sensor initialized successfully.");
+
+    // Per datasheet, it is recommended to soft reset the HTU21D sensor on start:
+    ret = htu21d_soft_reset();
+    if (ret != HTU21D_ERR_OK) {
+        ESP_LOGE(TAG, "Failed to soft reset the HTU21D sensor after initializing it, error: 0x%02X", ret);
+        return ret;
     }
 
     return HTU21D_ERR_OK;
@@ -202,6 +212,26 @@ int htu21d_set_resolution(uint8_t resolution)
     return htu21d_write_user_register(reg_value);
 }
 
+/**
+ * @brief Sends a *Soft Reset* command to reboot the HTU21D sensor.
+ *
+ * The 'Soft Reset' command is used for rebooting the HTU21D(F) sensor switching
+ * the power off and on again. Upon reception of this command, the HTU21D(F)
+ * sensor system reinitializes and starts operation according to the default
+ * settings with the exception of the heater bit in the user register. This
+ * command resets the user register to its default state, with the exception of
+ * the Heater bit.
+ *
+ * The soft reset takes less than 15ms.
+ *
+ * > Per the datasheet, a soft reset is recommended at start.
+ * @return Returns #HTU21D_ERR_OK if the soft reset was successful. If the soft
+ * reset was not successful, it returns one of the following error codes:
+ *   + #HTU21D_ERR_INVALID_ARG - Parameter error.
+ *   + #HTU21D_ERR_FAIL - Command error, the HTU21D slave hasn't ACK the transfer.
+ *   + #HTU21D_ERR_INVALID_STATE - I2C driver not installed or not in master mode.
+ *   + #HTU21D_ERR_TIMEOUT - Operation timeout because the I2C bus is busy.
+ */
 int htu21d_soft_reset()
 {
     esp_err_t ret;
@@ -224,17 +254,26 @@ int htu21d_soft_reset()
     switch (ret) {
 
     case ESP_ERR_INVALID_ARG:
+        ESP_LOGE(TAG, "Soft reset failed, parameter error.");
         return HTU21D_ERR_INVALID_ARG;
 
     case ESP_FAIL:
+        ESP_LOGE(TAG, "Sending Soft Reset command error, the HTU21D slave hasn't ACK the transfer.");
         return HTU21D_ERR_FAIL;
 
     case ESP_ERR_INVALID_STATE:
+        ESP_LOGE(TAG, "Soft reset failed,  I2C driver not installed or not in master mode.");
         return HTU21D_ERR_INVALID_STATE;
 
     case ESP_ERR_TIMEOUT:
+        ESP_LOGE(TAG, "Soft reset failed,  operation timeout because the I2C bus is busy.");
         return HTU21D_ERR_TIMEOUT;
     }
+
+    vTaskDelay(pdMS_TO_TICKS(HTU21_RESET_TIME));
+
+    ESP_LOGI(TAG, "HTU21D sensor soft reset was successful.");
+
     return HTU21D_ERR_OK;
 }
 
