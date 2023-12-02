@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['example_0',['example',['../classExample__Test.html#a22a62b12c65fd5e43b6eadaabb21ebb0',1,'Example_Test::example()'],['../classInclude__Test.html#aa286655e8f7f6a8ad203ef5fd8548b81',1,'Include_Test::example()'],['../classTag.html#acc641ffae34e2c4c03a6edf0a513be28',1,'Tag::example()']]]
+  ['read_5fvalue_0',['read_value',['../htu21d_8c.html#aae2cded128546fee5cc5cd9d0d1092ab',1,'read_value(uint8_t command):&#160;htu21d.c'],['../htu21d_8h.html#aae2cded128546fee5cc5cd9d0d1092ab',1,'read_value(uint8_t command):&#160;htu21d.c']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['i2c_5fscl_5fpin_0',['I2C_SCL_PIN',['../htu21d__calculations_8c.html#a0e4e08bab2fb484136d18b067bef372c',1,'htu21d_calculations.c']]],
-  ['i2c_5fsda_5fpin_1',['I2C_SDA_PIN',['../htu21d__calculations_8c.html#a2cade698267beb86ccaa38c14d35ab0f',1,'htu21d_calculations.c']]]
+  ['soft_5freset_0',['SOFT_RESET',['../htu21d_8h.html#a74625341a79e3484830c401d8947443c',1,'htu21d.h']]]
 ];

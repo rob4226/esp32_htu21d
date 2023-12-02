@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['b_0',['b',['../classB.html',1,'B'],['../memgrp_8cpp.html#a7ddc550b157ed6f8db58e462b504ab0f',1,'B:&#160;memgrp.cpp'],['../autolink_8cpp.html#a7ddc550b157ed6f8db58e462b504ab0f',1,'B:&#160;autolink.cpp']]],
-  ['base_1',['base',['../structVehicle.html#ad7970f528d429f6fc1725173e93a77c2',1,'Vehicle::base'],['../structCar.html#ab8ff28306286da5a8b14fa9bdccaafaa',1,'Car::base'],['../structTruck.html#ad0ac321609dda1a6c552488b05ec7ac8',1,'Truck::base']]],
-  ['bug_20fixes_2',['Bug Fixes',['../md_CHANGELOG.html#autotoc_md3',1,'']]],
-  ['bug_20list_3',['Bug List',['../bug.html',1,'']]]
+  ['calculations_20with_20the_20htu21d_20sensor_20driver_0',['Example of more calculations with the HTU21D Sensor &amp; Driver',['../md_examples_2calculations__htu21d_2README.html',1,'']]],
+  ['celsius_5fto_5ffahrenheit_1',['celsius_to_fahrenheit',['../htu21d_8c.html#a2c3cfdb690aad2dea107788bb2fdbf3d',1,'celsius_to_fahrenheit(float celsius_degrees):&#160;htu21d.c'],['../htu21d_8h.html#a2c3cfdb690aad2dea107788bb2fdbf3d',1,'celsius_to_fahrenheit(float celsius_degrees):&#160;htu21d.c']]],
+  ['changelog_2',['Changelog',['../md_CHANGELOG.html',1,'']]],
+  ['changelog_2emd_3',['CHANGELOG.md',['../CHANGELOG_8md.html',1,'']]],
+  ['compensated_20relative_20humidity_4',['Temperature Compensated Relative Humidity',['../htu21d_8h.html#autotoc_md7',1,'']]],
+  ['contributing_5',['Development/Contributing',['../index.html#autotoc_md13',1,'']]]
 ];
