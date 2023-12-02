@@ -27,7 +27,7 @@ static i2c_port_t _port = 0; /**< The I2C port that the HTU21D sensor is connect
  * @brief Initializes the HTU21D temperature/humidity sensor and the I2C bus.
  *
  * I2C bus runs in master mode @ 100,000.
- * @param port I2C port number to use, can be #I2C_NUM_0 ~ (#I2C_NUM_MAX - 1).
+ * @param port I2C port number to use, can be `I2C_NUM_0` ~ (`I2C_NUM_MAX` - 1).
  * @param sda_pin The GPIO pin number to use for the I2C sda (data) signal.
  * @param scl_pin The GPIO pin number to use for the I2C scl (clock) signal.
  * @param sda_internal_pullup Internal GPIO pull mode for I2C sda signal.

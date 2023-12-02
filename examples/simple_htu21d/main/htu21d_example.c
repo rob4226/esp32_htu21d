@@ -1,5 +1,5 @@
 /**
- * @file htu21_example.c
+ * @file htu21d_example.c
  * @brief Example of using this HTU21D sensor ESP-IDF component.
  * @author Rob4226 <Rob4226@yahoo.com>
  * @version 0.1
