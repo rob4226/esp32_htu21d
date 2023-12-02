@@ -57,3 +57,4 @@ build
 managed_components
 .vscode
 dependencies.lock
+docs
