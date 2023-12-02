@@ -3,6 +3,7 @@ var htu21d_8c =
     [ "HTU21_CONSTANT_A", "htu21d_8c.html#a837f184fd5f7cd215a73fde29517e680", null ],
     [ "HTU21_CONSTANT_B", "htu21d_8c.html#a9ab0f7858e0ae95aaeda107dc97b37fa", null ],
     [ "HTU21_CONSTANT_C", "htu21d_8c.html#aa5e26d52ff76908c4b22baeebe83d017", null ],
+    [ "HTU21_RESET_TIME", "htu21d_8c.html#a19f657c02c0bc782da266a19d7d1c83c", null ],
     [ "HTU21_TEMPERATURE_COEFFICIENT", "htu21d_8c.html#ac1b78d35a052811edfebff2d5a6d0ac3", null ],
     [ "celsius_to_fahrenheit", "htu21d_8c.html#a2c3cfdb690aad2dea107788bb2fdbf3d", null ],
     [ "htu21_compute_compensated_humidity", "htu21d_8c.html#a2d814d0d12bf79f01257b7f50321b116", null ],
