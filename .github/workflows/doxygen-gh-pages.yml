@@ -11,10 +11,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: DenverCoder1/doxygen-github-pages-action@v1.3.0
+      # Was using https://github.com/DomRe/doxygen-github-pages-action which worked fine but that one uses the
+      # Doxygen version provided by Ubuntu which is 1.9.1 while this fork allows you to specify the version you
+      # want by downloading a built binary of Doxygen from sourceforge so can use latest like 1.9.8:
+      # - uses: DenverCoder1/doxygen-github-pages-action@v1.3.0
+      - uses: DomRe/doxygen-github-pages-action@7d0c553c3754a36a192d9581fcd1963192b6bcd5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           folder: docs/html
           config_file: Doxyfile
           branch: gh-pages
           target_folder: docs
+          # Additional option from fork (defaults to v1.9.8 which is the latest so leave out):
+          # version: "1.9.8"
