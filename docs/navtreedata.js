@@ -25,38 +25,60 @@
 var NAVTREE =
 [
   [ "esp32_htu21d IDF Component", "index.html", [
-    [ "esp32_htu21d", "index.html", [
-      [ "How to Use", "index.html#autotoc_md9", [
-        [ "Example", "index.html#autotoc_md10", null ]
-      ] ],
-      [ "HTU21D Sensor", "index.html#autotoc_md11", [
-        [ "Measurement Resolutions", "index.html#autotoc_md12", null ]
-      ] ],
-      [ "Development/Contributing", "index.html#autotoc_md13", null ]
-    ] ],
+    [ "esp32_htu21d", "index.html", "index" ],
     [ "Changelog", "md_CHANGELOG.html", [
       [ "1.0.0 (2023-11-28)", "md_CHANGELOG.html#autotoc_md1", [
         [ "Features", "md_CHANGELOG.html#autotoc_md2", null ],
         [ "Bug Fixes", "md_CHANGELOG.html#autotoc_md3", null ]
       ] ]
     ] ],
-    [ "Example of more calculations with the HTU21D Sensor & Driver", "md_examples_calculations_htu21d_README.html", null ],
-    [ "Example Projects", "md_examples_README.html", null ],
-    [ "Simple Example of Using the HTU21D Sensor & Driver", "md_examples_simple_htu21d_README.html", null ],
+    [ "pag_example", "pag_example.html", null ],
+    [ "Example of more calculations with the HTU21D Sensor & Driver", "md_examples_2calculations__htu21d_2README.html", null ],
+    [ "Example Projects", "md_examples_2README.html", null ],
+    [ "Simple Example of Using the HTU21D Sensor & Driver", "md_examples_2simple__htu21d_2README.html", null ],
+    [ "Bug List", "bug.html", null ],
+    [ "Topics", "topics.html", "topics" ],
+    [ "Namespaces", "namespaces.html", [
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ]
+      ] ]
+    ] ],
+    [ "Classes", "annotated.html", [
+      [ "Class List", "annotated.html", "annotated_dup" ],
+      [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
+      [ "Class Members", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ],
+        [ "Variables", "functions_vars.html", null ],
+        [ "Enumerations", "functions_enum.html", null ],
+        [ "Enumerator", "functions_eval.html", null ],
+        [ "Related Symbols", "functions_rela.html", null ]
+      ] ]
+    ] ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ],
+        [ "Typedefs", "globals_type.html", null ],
+        [ "Enumerations", "globals_enum.html", null ],
+        [ "Enumerator", "globals_eval.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
-    ] ]
+    ] ],
+    [ "Examples", "examples.html", "examples" ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"dir_13aac1dd1e69e21e3b2462dabe79442a.html"
+"afterdoc_8h.html",
+"htu21d__calculations_8c.html#a0e4e08bab2fb484136d18b067bef372c"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

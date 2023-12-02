@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_5f_5fesp_5fhtu21d_5fh_5f_5f_0',['__ESP_HTU21D_H__',['../htu21d_8h.html#ab95cc75c37323a4ee2cebf6b63a4f042',1,'htu21d.h']]]
+  ['0_200_202023_2011_2028_0',['1.0.0 (2023-11-28)',['../md_CHANGELOG.html#autotoc_md1',1,'']]]
 ];

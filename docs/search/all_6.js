@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['read_5fuser_5freg_39',['READ_USER_REG',['../htu21d_8h.html#ac8f29e611d6f87ee93d909b98a4db95d',1,'htu21d.h']]],
-  ['read_5fvalue_40',['read_value',['../htu21d_8c.html#aae2cded128546fee5cc5cd9d0d1092ab',1,'read_value(uint8_t command):&#160;htu21d.c'],['../htu21d_8h.html#aae2cded128546fee5cc5cd9d0d1092ab',1,'read_value(uint8_t command):&#160;htu21d.c']]],
-  ['readme_2emd_41',['README.md',['../examples_2calculations__htu21d_2README_8md.html',1,'(Global Namespace)'],['../examples_2README_8md.html',1,'(Global Namespace)'],['../examples_2simple__htu21d_2README_8md.html',1,'(Global Namespace)'],['../README_8md.html',1,'(Global Namespace)']]]
+  ['b_0',['b',['../classB.html',1,'B'],['../memgrp_8cpp.html#a7ddc550b157ed6f8db58e462b504ab0f',1,'B:&#160;memgrp.cpp'],['../autolink_8cpp.html#a7ddc550b157ed6f8db58e462b504ab0f',1,'B:&#160;autolink.cpp']]],
+  ['base_1',['base',['../structVehicle.html#ad7970f528d429f6fc1725173e93a77c2',1,'Vehicle::base'],['../structCar.html#ab8ff28306286da5a8b14fa9bdccaafaa',1,'Car::base'],['../structTruck.html#ad0ac321609dda1a6c552488b05ec7ac8',1,'Truck::base']]],
+  ['bug_20fixes_2',['Bug Fixes',['../md_CHANGELOG.html#autotoc_md3',1,'']]],
+  ['bug_20list_3',['Bug List',['../bug.html',1,'']]]
 ];

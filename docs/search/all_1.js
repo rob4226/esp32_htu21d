@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['app_5fmain_1',['app_main',['../htu21d__calculations_8c.html#a630544a7f0a2cc40d8a7fefab7e2fe70',1,'app_main(void):&#160;htu21d_calculations.c'],['../htu21d__example_8c.html#a630544a7f0a2cc40d8a7fefab7e2fe70',1,'app_main(void):&#160;htu21d_example.c']]]
+  ['1_200_200_202023_2011_2028_0',['1.0.0 (2023-11-28)',['../md_CHANGELOG.html#autotoc_md1',1,'']]],
+  ['11_2028_1',['1.0.0 (2023-11-28)',['../md_CHANGELOG.html#autotoc_md1',1,'']]]
 ];
